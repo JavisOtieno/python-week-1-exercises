@@ -74,7 +74,7 @@ def find_high_fee(fee_list):
 
 def get_wallet_details():
     """Return basic wallet details as a tuple."""
-    return ("BtrustWallet", 12.5)
+    return ("satoshi_wallet", 50.0)
 
 
 def get_tx_status(tx_pool, txid):
@@ -85,7 +85,7 @@ def get_tx_status(tx_pool, txid):
 def unpack_wallet_info(wallet_info):
     """Unpack wallet information from a tuple and return a formatted string."""
     name, balance = wallet_info
-    return f"Wallet {name} has {balance} BTC"
+    return f"Wallet {name} has balance: {balance} BTC"
 
 
 def calculate_sats(btc: float) -> int:
@@ -105,12 +105,12 @@ def validate_block_height(height: Union[int, float, str]) -> Tuple[bool, str]:
     try:
         height = int(height)
     except (ValueError, TypeError):
-        return False, "Height must be an integer"
+        return False, "Block height must be an integer"
     
     if height < 0:
-        return False, "Height cannot be negative"
+        return False, "Block height cannot be negative"
     if height > 800000:
-        return False, "Height exceeds realistic range"
+        return False, "Block height seems unrealistic"
     
     return True, "Valid block height"
 
