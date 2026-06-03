@@ -102,8 +102,13 @@ def generate_address(prefix: str = "bc1q") -> str:
 
 def validate_block_height(height: Union[int, float, str]) -> Tuple[bool, str]:
     """Validate a Bitcoin block height."""
+    # Only accept actual integers or integer-like floats.
+    # Reject strings entirely (as per current test expectation)
+    if isinstance(height, str):
+        return False, "Block height must be an integer"
+    
     try:
-        # Check if it's a float with decimal part (like 123.5)
+        # Check for non-integer floats (like 123.5)
         if isinstance(height, float) and not height.is_integer():
             return False, "Block height must be an integer"
         
