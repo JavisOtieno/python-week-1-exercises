@@ -103,6 +103,10 @@ def generate_address(prefix: str = "bc1q") -> str:
 def validate_block_height(height: Union[int, float, str]) -> Tuple[bool, str]:
     """Validate a Bitcoin block height."""
     try:
+        # Check if it's a float with decimal part (like 123.5)
+        if isinstance(height, float) and not height.is_integer():
+            return False, "Block height must be an integer"
+        
         height = int(height)
     except (ValueError, TypeError):
         return False, "Block height must be an integer"
@@ -117,13 +121,13 @@ def validate_block_height(height: Union[int, float, str]) -> Tuple[bool, str]:
 
 def halving_schedule(blocks: List[int]) -> Dict[int, int]:
     """Calculate block reward for given block heights based on halving schedule."""
-    base_reward = 50_000_000_000  # 50 BTC in satoshis (Genesis reward)
+    base_reward = 5_000_000_000   # 50 BTC in satoshis (FIXED)
     halving_interval = 210_000
     
     result = {}
     for block in blocks:
         halvings = block // halving_interval
-        reward = base_reward >> halvings   # Integer division by 2^halvings
+        reward = base_reward >> halvings   # Right shift = divide by 2^halvings
         result[block] = reward
     return result
 
